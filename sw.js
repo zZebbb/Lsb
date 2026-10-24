@@ -1,7 +1,7 @@
 // Gerado por ferramentas/gerar_sw.mjs — não edite à mão.
 // Guarda todos os arquivos do app no aparelho para funcionar sem internet.
 
-const VERSAO = 'd12665bf59';
+const VERSAO = '1e0f328bc7';
 const CACHE = 'lance-a-lance-' + VERSAO;
 const ARQUIVOS = [
   "./",

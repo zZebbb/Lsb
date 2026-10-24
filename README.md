@@ -7,7 +7,7 @@ App de xadrez para o celular que **funciona sem internet**: puzzles táticos com
 ## O que tem
 
 **Puzzles**
-- Banco de puzzles gerados com o Stockfish, cada um com solução única verificada pelo motor.
+- 1.000 puzzles gerados com o Stockfish (rating de 400 a 2.600), cada um com solução única verificada pelo motor.
 - Rating que se ajusta ao seu nível (começa em 1200 e acompanha seus acertos).
 - O adversário faz o lance que cria a tática; você encontra a resposta.
 - Dica (mostra a peça, depois a seta), ver solução, rever lance a lance.
