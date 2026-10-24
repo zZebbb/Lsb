@@ -372,6 +372,9 @@ export class Tabuleiro {
 
   escolherPromocao(de, para) {
     const cor = this.posicao.get(de)[0];
+    // no toque, o mesmo gesto que abre o seletor ainda gera um "click" logo depois: ignoramos
+    const aberto = performance.now();
+    const cedo = () => performance.now() - aberto < 350;
     const [x, y] = this.tela(para);
     this.promocao.innerHTML = '';
     this.promocao.hidden = false;
@@ -388,6 +391,7 @@ export class Tabuleiro {
       b.setAttribute('aria-label', { q: 'Dama', n: 'Cavalo', r: 'Torre', b: 'Bispo' }[p]);
       b.addEventListener('click', (ev) => {
         ev.stopPropagation();
+        if (cedo()) return;
         this.promocao.hidden = true;
         this.selecionar(null);
         this.op.aoMover?.({ from: de, to: para, promotion: p });
@@ -396,6 +400,7 @@ export class Tabuleiro {
     }
     this.promocao.append(coluna);
     this.promocao.onclick = () => {
+      if (cedo()) return;
       this.promocao.hidden = true;
       // devolve a peça que pode ter sido arrastada
       const el = this.elementos.get(de);
