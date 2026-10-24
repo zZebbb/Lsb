@@ -61,20 +61,28 @@ export async function telaPuzzles(raiz, { tema, id } = {}, app) {
   const chips = h('div', { class: 'chips', role: 'tablist', 'aria-label': 'Filtrar por tema' });
   raiz.append(barra, area, status, botoes, detalhes, h('h3', { class: 'pequeno suave' }, 'Treinar um tema'), chips);
 
-  chips.append(
-    h('button', { class: 'chip' + (tema ? '' : ' ativo'), onclick: () => app.ir('#/puzzles') }, 'Todos'),
-    ...TEMAS_FILTRO.map((t) =>
-      h('button', { class: 'chip' + (tema === t ? ' ativo' : ''), onclick: () => app.ir('#/puzzles/' + t) }, NOMES_TEMAS[t]),
-    ),
-  );
-  requestAnimationFrame(() => chips.querySelector('.ativo')?.scrollIntoView({ inline: 'center', block: 'nearest' }));
-
   let puzzles;
   try {
     puzzles = await carregarPuzzles();
   } catch {
     status.className = 'status errado';
     status.textContent = 'Não foi possível carregar os puzzles.';
+    return;
+  }
+
+  const contagem = {};
+  for (const p of puzzles) for (const t of p.temas) contagem[t] = (contagem[t] || 0) + 1;
+  chips.append(
+    h('button', { class: 'chip' + (tema ? '' : ' ativo'), onclick: () => app.ir('#/puzzles') }, 'Todos'),
+    ...TEMAS_FILTRO.filter((t) => contagem[t] >= 5 || t === tema).map((t) =>
+      h('button', { class: 'chip' + (tema === t ? ' ativo' : ''), onclick: () => app.ir('#/puzzles/' + t) }, NOMES_TEMAS[t]),
+    ),
+  );
+  requestAnimationFrame(() => chips.querySelector('.ativo')?.scrollIntoView({ inline: 'center', block: 'nearest' }));
+
+  if (tema && !contagem[tema]) {
+    status.className = 'status fim';
+    status.textContent = 'Ainda não há puzzles deste tema.';
     return;
   }
 

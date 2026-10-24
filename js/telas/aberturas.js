@@ -31,7 +31,8 @@ function registrarTreino(ab, i, erros) {
   else if (erros >= 2) p.nivel = Math.max(0, p.nivel - 1);
   p.treinos++;
   p.ultimo = Date.now();
-  p.proxima = Date.now() + INTERVALOS[p.nivel] * DIA;
+  // com 2 erros ou mais a linha volta logo para a revisão; senão, segue os intervalos (no mínimo 1 dia)
+  p.proxima = erros >= 2 ? Date.now() : Date.now() + Math.max(1, INTERVALOS[p.nivel]) * DIA;
   tudo[chave(ab, i)] = p;
   armazenamento.gravar('aberturas', tudo);
   return p;
@@ -521,7 +522,8 @@ export function telaTreinar(raiz, { id, linha, revisao }, app) {
     const p = registrarTreino(ab, indiceLinha, erros);
     atualizarInfo();
     som.fim();
-    const proxima = p.nivel >= 5 ? 'Linha dominada!' : `Próxima revisão em ${INTERVALOS[p.nivel]} ${INTERVALOS[p.nivel] === 1 ? 'dia' : 'dias'}.`;
+    const dias = Math.round((p.proxima - Date.now()) / DIA);
+    const proxima = p.nivel >= 5 ? 'Linha dominada!' : `Próxima revisão em ${dias} ${dias === 1 ? 'dia' : 'dias'}.`;
     if (erros === 0) setStatus('certo', 'Linha concluída sem erros!', proxima);
     else setStatus('fim', `Linha concluída com ${erros} ${erros === 1 ? 'erro' : 'erros'}.`, erros >= 2 ? 'Vamos revisar de novo em breve.' : proxima);
     montarBotoes();
