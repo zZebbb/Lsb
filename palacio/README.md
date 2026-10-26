@@ -7,12 +7,14 @@ App de treino de memória para o celular que **funciona sem internet**, em portu
 ## O que tem
 
 **Sistema mnemônico principal** (Major System): cada algarismo vira um som de consoante e as vogais são livres. Assim 45 vira ROLO, e qualquer número vira uma sequência de imagens.
-- A tabela e uma lista de 110 palavras sugeridas (0–9 e 00–99), que você pode trocar. O app confere se cada palavra bate com a tabela.
+- A tabela (pode ser recolhida, na tela do sistema e nos treinos), com uma palavra para lembrar a letra de cada número: Sz, Tudo, Nada, Morte, Rocket, League, Xj, Kaguya, Favo, Pb. Só a primeira letra importa.
+- Uma lista de 110 palavras sugeridas (0–9 e 00–99), que você pode trocar. O app confere se cada palavra bate com a tabela.
 - **Lembrar a palavra**: aparece o número e você lembra a sua palavra (mede o tempo).
 - **Qual é o número?**: aparece a sua palavra e você digita o número.
 - **Decodificar**: palavras quaisquer escondem números; descubra qual.
 - **Crie uma palavra**: invente uma palavra para um número de 2 a 4 dígitos; o app confere e mostra letra por letra.
 - Os pares errados ou lentos aparecem mais vezes. "Pares rápidos" conta quantos você já domina.
+- **Foguinho**: três acertos rápidos seguidos acendem uma chama com a contagem; ela cresce a cada acerto e explode a cada 5. Errar ou demorar apaga. Vale nos treinos com tempo e no "Já vi ou nova?".
 
 **Sequência de números**: o número aparece por alguns segundos, some e você digita. A cada acerto, mais um algarismo. Ritmo (rápido/normal/calmo), nível inicial, agrupamento em pares ou trios e, no resultado, as palavras do sistema para cada par.
 
@@ -53,6 +55,7 @@ js/util.js                                armazenamento, sons, recordes, ícones
 js/componentes.js, js/teclado.js          peças de interface e teclado numérico
 js/sistema.js                             regras do sistema (palavra -> número) e suas palavras
 js/srs.js                                 repetição espaçada dos cartões
+js/fogo.js                                o foguinho dos acertos rápidos seguidos
 js/telas/                                 início, números, palavras, cartões, sistema
 dados/sistema.js                          tabela e palavras sugeridas de 0 a 99
 dados/palavras.js                         palavras do "Já vi ou nova?" e do treino de decodificar

@@ -1,7 +1,7 @@
 // Peças de interface usadas em várias telas: opções em "pílulas", interruptor,
 // gráfico de barras, confete de blocos e o cabeçalho colorido dos jogos.
 
-import { h, icone, config, salvarConfig } from './util.js';
+import { h, icone, config, salvarConfig, animar } from './util.js';
 
 // Grupo de opções mutuamente exclusivas, salvo na configuração.
 export function pilulas(rotulo, chave, opcoes, aoMudar) {
@@ -16,6 +16,26 @@ export function pilulas(rotulo, chave, opcoes, aoMudar) {
     return b;
   });
   return h('div', { class: 'opcao' }, h('span', { class: 'opcao-rotulo' }, rotulo), h('div', { class: 'pilulas', role: 'group', 'aria-label': rotulo }, ...botoes));
+}
+
+// Seção que abre e fecha com um toque; lembra a escolha na configuração (`chave`).
+export function recolhivel(titulo, chave, conteudo, { nivel = 'h3' } = {}) {
+  const corpo = h('div', { class: 'recolhivel-corpo' }, conteudo);
+  const acao = h('span', { class: 'recolhivel-acao' });
+  const botao = h('button', { type: 'button', class: 'recolhivel-botao' }, h('span', { class: 'crescer' }, titulo), acao, icone('seta', 22));
+  const mostrar = (aberta) => {
+    corpo.hidden = !aberta;
+    botao.setAttribute('aria-expanded', String(aberta));
+    acao.textContent = aberta ? 'Esconder' : 'Mostrar';
+  };
+  mostrar(config()[chave] !== false);
+  botao.addEventListener('click', () => {
+    const abrir = corpo.hidden;
+    mostrar(abrir);
+    salvarConfig({ [chave]: abrir });
+    if (abrir) animar(corpo, 'abrir');
+  });
+  return h('div', { class: 'recolhivel' }, h(nivel, { class: 'recolhivel-titulo' }, botao), corpo);
 }
 
 export function interruptor(rotulo, chave, aoMudar, descricao = null) {

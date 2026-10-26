@@ -109,6 +109,14 @@ export const som = {
     tom(659, 0.12, { volume: 0.12, atraso: 0.1 });
     tom(784, 0.25, { volume: 0.12, atraso: 0.2 });
   },
+  fogo: () => {
+    tom(240, 0.32, { tipo: 'sawtooth', volume: 0.04, ate: 520 });
+    tom(520, 0.28, { tipo: 'triangle', volume: 0.1, atraso: 0.05, ate: 1040 });
+  },
+  fogoGrande: () => {
+    tom(200, 0.45, { tipo: 'sawtooth', volume: 0.05, ate: 700 });
+    [660, 880, 1175].forEach((f, i) => tom(f, 0.16, { tipo: 'triangle', volume: 0.12, atraso: 0.08 + i * 0.07 }));
+  },
   recorde: () => {
     [523, 659, 784, 1047].forEach((f, i) => tom(f, 0.18, { tipo: 'triangle', volume: 0.14, atraso: i * 0.09 }));
     vibrar([40, 40, 80]);
@@ -219,6 +227,7 @@ const ICONES = {
   progresso: 'M4 20V12M10 20V6M16 20v-9M22 20H2',
   ajustes: 'M12 15a3 3 0 100-6 3 3 0 000 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1',
   voltar: 'M15 5l-7 7 7 7',
+  seta: 'M6 9l6 6 6-6',
   coracao: 'M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z',
   fogo: 'M12 3s5 4 5 9a5 5 0 01-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3 1-5.5 1-7.5z',
   raio: 'M13 2L4 14h7l-1 8 9-12h-7z',

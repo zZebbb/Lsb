@@ -3,9 +3,11 @@
 
 import { h, icone, som, registrarResultado, recorde, resultados, embaralhar, sortear, animar } from '../util.js';
 import { graficoBarras, confete, cabecalhoJogo, numeroDestaque, media, formatarDecimal } from '../componentes.js';
+import { criarFogo } from '../fogo.js';
 import { PALAVRAS } from '../../dados/palavras.js';
 
 const VIDAS = 3;
+const RAPIDO = 2000; // ms: resposta rápida o bastante para manter o foguinho aceso
 
 // Chance de repetir uma palavra já vista: começa baixa e sobe até metade das rodadas.
 function chanceDeRepetir(vistas) {
@@ -19,6 +21,7 @@ export function telaPalavras(raiz, _params, app) {
   const palco = h('div', { class: 'palco bloco cor-lima' });
   const abaixo = h('div', { class: 'abaixo-palco' });
   raiz.append(palco, abaixo);
+  const fogo = criarFogo(raiz, { lugar: 'topo' });
   let aoTeclar = null;
 
   function trocar(conteudoPalco, ...conteudoAbaixo) {
@@ -31,11 +34,12 @@ export function telaPalavras(raiz, _params, app) {
 
   function inicio() {
     app.definirVoltar('#/');
+    fogo.reiniciar();
     const hist = resultados('palavras').map((r) => r.v);
     const ultimos = hist.slice(-10);
     trocar(
       [
-        cabecalhoJogo('palavras', 'Já vi ou nova?', 'As palavras vão aparecendo. Diga se cada uma já apareceu nesta partida. Você tem 3 vidas.'),
+        cabecalhoJogo('palavras', 'Já vi ou nova?', 'As palavras vão aparecendo. Diga se cada uma já apareceu nesta partida. Você tem 3 vidas, e respostas rápidas seguidas acendem o foguinho.'),
         h(
           'div',
           { class: 'destaques' },
@@ -68,7 +72,9 @@ export function telaPalavras(raiz, _params, app) {
     let vidas = VIDAS;
     let pontos = 0;
     let atual = null;
+    let mostradaEm = 0;
     let travado = false;
+    fogo.reiniciar();
 
     const coracoes = h('div', { class: 'vidas', 'aria-label': `${VIDAS} vidas` }, ...Array.from({ length: VIDAS }, () => h('span', { class: 'vida' }, icone('coracao', 26))));
     const placar = h('div', { class: 'placar' }, h('span', {}, 'Pontos'), h('strong', {}, '0'));
@@ -98,6 +104,7 @@ export function telaPalavras(raiz, _params, app) {
       palavra.textContent = atual;
       palavra.style.fontSize = `${Math.max(34, Math.min(76, Math.floor((palco.clientWidth - 40) / (atual.length * 0.6))))}px`;
       animar(palavra, 'pular');
+      mostradaEm = performance.now();
       travado = false;
     }
 
@@ -111,6 +118,7 @@ export function telaPalavras(raiz, _params, app) {
       }
       if (disseVi === eraVista) {
         som.acerto();
+        fogo.acerto(performance.now() - mostradaEm <= RAPIDO);
         pontos++;
         placar.querySelector('strong').textContent = String(pontos);
         animar(placar, 'pular');
@@ -120,6 +128,7 @@ export function telaPalavras(raiz, _params, app) {
         return;
       }
       som.erro();
+      fogo.erro();
       vidas--;
       const perdida = coracoes.children[vidas];
       perdida.classList.add('perdida');
@@ -128,7 +137,7 @@ export function telaPalavras(raiz, _params, app) {
       animar(retorno, 'pular');
       animar(palco, 'tremer');
       if (vidas <= 0) {
-        setTimeout(() => fim(pontos, vistas.length), 900);
+        setTimeout(() => fim(pontos, vistas.length, fogo.melhor), 900);
         return;
       }
       setTimeout(mostrarProxima, 750);
@@ -137,7 +146,8 @@ export function telaPalavras(raiz, _params, app) {
     mostrarProxima();
   }
 
-  function fim(pontos, total) {
+  function fim(pontos, total, maiorFogo) {
+    fogo.reiniciar();
     som.fim();
     const { novoRecorde } = registrarResultado('palavras', pontos);
     const titulo = h('div', { class: 'titulo-resultado' }, novoRecorde ? 'Novo recorde!' : 'Fim de jogo');
@@ -146,6 +156,7 @@ export function telaPalavras(raiz, _params, app) {
         titulo,
         h('div', { class: 'placar-final' }, h('strong', {}, String(pontos)), h('span', {}, pontos === 1 ? 'ponto' : 'pontos')),
         h('p', { class: 'pequeno centro' }, `${total} palavras diferentes apareceram nesta partida.`),
+        maiorFogo >= 3 ? h('p', { class: 'centro fogo-resumo' }, icone('fogo', 22), `${maiorFogo} acertos rápidos seguidos`) : null,
       ],
       h(
         'div',

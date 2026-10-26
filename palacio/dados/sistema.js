@@ -1,17 +1,18 @@
 // Sistema mnemônico principal (Major System): cada algarismo é um som de consoante;
 // vogais, H, W e Y não valem nada. Assim qualquer número vira palavras fáceis de imaginar.
 
+// `lembrete`: palavra para lembrar a letra de cada número; só a primeira letra importa.
 export const TABELA = [
-  { digito: '0', letras: 'S, Z, Ç', nota: 'e C antes de E/I', exemplo: 'Sapo' },
-  { digito: '1', letras: 'T, D', nota: '', exemplo: 'Dedo' },
-  { digito: '2', letras: 'N', nota: 'e NH', exemplo: 'Navio' },
-  { digito: '3', letras: 'M', nota: '', exemplo: 'Mão' },
-  { digito: '4', letras: 'R', nota: 'RR conta uma vez', exemplo: 'Rei' },
-  { digito: '5', letras: 'L', nota: 'e LH', exemplo: 'Lua' },
-  { digito: '6', letras: 'J, X, CH', nota: 'e G antes de E/I', exemplo: 'Chave' },
-  { digito: '7', letras: 'K, Q', nota: 'C e G duros: ca, co, cu, ga, go, gu', exemplo: 'Coco' },
-  { digito: '8', letras: 'F, V', nota: '', exemplo: 'Faca' },
-  { digito: '9', letras: 'P, B', nota: '', exemplo: 'Pipa' },
+  { digito: '0', letras: 'S, Z, Ç', nota: 'e C antes de E/I', lembrete: 'Sz' },
+  { digito: '1', letras: 'T, D', nota: '', lembrete: 'Tudo' },
+  { digito: '2', letras: 'N', nota: 'e NH', lembrete: 'Nada' },
+  { digito: '3', letras: 'M', nota: '', lembrete: 'Morte' },
+  { digito: '4', letras: 'R', nota: 'RR conta uma vez', lembrete: 'Rocket' },
+  { digito: '5', letras: 'L', nota: 'e LH', lembrete: 'League' },
+  { digito: '6', letras: 'J, X, CH', nota: 'e G antes de E/I', lembrete: 'Xj' },
+  { digito: '7', letras: 'K, Q', nota: 'C e G duros: ca, co, cu, ga, go, gu', lembrete: 'Kaguya' },
+  { digito: '8', letras: 'F, V', nota: '', lembrete: 'Favo' },
+  { digito: '9', letras: 'P, B', nota: '', lembrete: 'Pb' },
 ];
 
 // Sugestões de palavras (fáceis de visualizar) para 0–9 e 00–99. Você pode trocar qualquer uma no app.

@@ -2,7 +2,8 @@
 // (lembrar a palavra, achar o número, decodificar palavras e criar palavras novas).
 
 import { h, icone, som, config, registrarResultado, recorde, sortear, embaralhar, animar } from '../util.js';
-import { pilulas, confete, numeroDestaque, formatarDecimal, media } from '../componentes.js';
+import { pilulas, recolhivel, confete, numeroDestaque, formatarDecimal, media } from '../componentes.js';
+import { criarFogo } from '../fogo.js';
 import { tecladoNumerico, campoDigitos } from '../teclado.js';
 import { TABELA, PALAVRAS_PADRAO } from '../../dados/sistema.js';
 import { PALAVRAS } from '../../dados/palavras.js';
@@ -24,6 +25,13 @@ import {
 } from '../sistema.js';
 
 const CORES_DIGITOS = ['coral', 'lima', 'violeta', 'ciano', 'sol', 'rosa', 'coral', 'lima', 'violeta', 'ciano'];
+
+// Até quanto tempo (ms) um acerto conta como rápido, para acender o foguinho.
+const RAPIDO = {
+  lembrar: 2500,
+  numero: 2500,
+  decodificar: (digitos) => 1500 + 1500 * digitos,
+};
 
 const TREINOS = {
   lembrar: {
@@ -101,22 +109,32 @@ export function telaSistema(raiz, _params, app) {
         h('p', { class: 'pequeno' }, 'Cada algarismo vira um som de consoante e as vogais são livres. Assim, 45 vira ROLO, e 4545 vira "rolo, rolo".'),
       ),
     ),
-    h('h2', {}, 'A tabela'),
-    h(
-      'div',
-      { class: 'tabela-sistema' },
-      ...TABELA.map((t, i) =>
+    recolhivel(
+      'A tabela',
+      'tabelaSistemaAberta',
+      [
         h(
           'div',
-          { class: `bloco ficha-digito cor-${CORES_DIGITOS[i]}` },
-          h('span', { class: 'ficha-numero' }, t.digito),
-          h('span', { class: 'ficha-letras' }, t.letras),
-          t.nota && h('span', { class: 'ficha-nota' }, t.nota),
-          h('span', { class: 'ficha-exemplo' }, t.exemplo),
+          { class: 'tabela-sistema' },
+          ...TABELA.map((t, i) =>
+            h(
+              'div',
+              { class: `bloco ficha-digito cor-${CORES_DIGITOS[i]}` },
+              h('span', { class: 'ficha-numero' }, t.digito),
+              h('span', { class: 'ficha-letras' }, t.letras),
+              t.nota && h('span', { class: 'ficha-nota' }, t.nota),
+              h('span', { class: 'ficha-lembrete' }, h('b', {}, t.lembrete[0]), t.lembrete.slice(1)),
+            ),
+          ),
         ),
-      ),
+        h(
+          'p',
+          { class: 'pequeno suave' },
+          'Vogais, H, W e Y não valem nada. Letras dobradas (RR, SS) contam uma vez só. Na palavra de cada número, só a primeira letra importa.',
+        ),
+      ],
+      { nivel: 'h2' },
     ),
-    h('p', { class: 'pequeno suave' }, 'Vogais, H, W e Y não valem nada. Letras dobradas (RR, SS) contam uma vez só.'),
     h('h2', {}, 'Treinos'),
     h(
       'div',
@@ -280,6 +298,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
   const palco = h('div', { class: 'palco bloco cor-violeta' });
   const abaixo = h('div', { class: 'abaixo-palco' });
   raiz.append(palco, abaixo);
+  const fogo = criarFogo(raiz);
 
   let teclado = null;
   let relogio = null;
@@ -308,6 +327,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
 
   function inicio() {
     app.definirVoltar('#/sistema');
+    fogo.reiniciar();
     const opcoes =
       tipo === 'lembrar' || tipo === 'numero'
         ? pilulas('Números', 'faixaSistema', FAIXAS)
@@ -320,12 +340,19 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
           : null;
     trocar(
       [
-        h('div', { class: 'cabecalho-jogo' }, h('span', { class: 'cabecalho-icone' }, icone(treino.icone, 34)), h('h2', {}, treino.titulo), h('p', {}, treino.texto)),
+        h(
+          'div',
+          { class: 'cabecalho-jogo' },
+          h('span', { class: 'cabecalho-icone' }, icone(treino.icone, 34)),
+          h('h2', {}, treino.titulo),
+          h('p', {}, treino.texto),
+          RAPIDO[tipo] && h('p', { class: 'pequeno' }, 'Acertos rápidos seguidos acendem o foguinho.'),
+        ),
         h('div', { class: 'destaques' }, numeroDestaque(recorde(`sistema-${tipo}`) ? `${recorde(`sistema-${tipo}`)}/${treino.rodadas}` : '–', 'recorde')),
         h('button', { class: 'botao escuro grande', onclick: comecar }, 'Começar'),
       ],
       opcoes && h('div', { class: 'bloco' }, opcoes),
-      h('div', { class: 'bloco' }, h('h3', {}, 'Tabela'), miniTabela()),
+      h('div', { class: 'bloco' }, recolhivel('Tabela', 'tabelaTreinoAberta', miniTabela())),
     );
   }
 
@@ -336,6 +363,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
     tempos = [];
     erros = [];
     anterior = null;
+    fogo.reiniciar();
     proxima();
   }
 
@@ -379,6 +407,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
                 registrarTentativa(par, true, ms);
                 tempos.push(ms);
                 marcar(true, par);
+                fogo.acerto(ms <= RAPIDO.lembrar);
                 proxima();
               },
             },
@@ -393,6 +422,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
                 som.erro();
                 registrarTentativa(par, false, ms);
                 marcar(false, par, palavra);
+                fogo.erro();
                 proxima();
               },
             },
@@ -437,11 +467,13 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
         som.acerto();
         tempos.push(ms);
         marcar(true, par);
+        fogo.acerto(ms <= RAPIDO.numero);
         animar(palco, 'brilho');
         relogio = setTimeout(proxima, 350);
       } else {
         som.erro();
         marcar(false, par, palavra);
+        fogo.erro();
         animar(palco, 'tremer');
         trocar([contador(), h('div', { class: 'palavra-exibida' }, palavra), decomposicao(palavra), h('p', { class: 'pergunta' }, `Era ${par}`)], h('button', { class: 'botao escuro largo grande', onclick: proxima }, 'Continuar'));
       }
@@ -472,6 +504,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
   function rodadaDecodificar() {
     const palavra = palavraParaDecodificar();
     const certo = numeroPrincipal(palavra);
+    const inicioMs = performance.now();
     const campo = campoDigitos(8, { livre: true });
     const exibida = h('div', { class: 'palavra-exibida' }, palavra);
     const conferir = () => {
@@ -480,9 +513,11 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
       if (acertou) {
         som.acerto();
         marcar(true, palavra);
+        fogo.acerto(performance.now() - inicioMs <= RAPIDO.decodificar(certo.length));
       } else {
         som.erro();
         marcar(false, palavra, certo);
+        fogo.erro();
       }
       trocar(
         [contador(), h('div', { class: 'palavra-exibida' }, palavra), decomposicao(palavra), h('p', { class: `pergunta ${acertou ? 'ok' : 'alerta'}` }, acertou ? `Isso: ${certo}` : `Você digitou ${campo.valor}. Era ${certo}.`)],
@@ -548,7 +583,7 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
       animar(palco, acertou ? 'brilho' : 'tremer');
     };
     entrada.addEventListener('keydown', (e) => e.key === 'Enter' && conferir());
-    trocar([contador(), exibido, h('p', { class: 'pergunta' }, 'Invente uma palavra para este número')], entrada, h('button', { class: 'botao escuro largo grande', onclick: conferir }, 'Conferir'), h('div', { class: 'bloco' }, miniTabela()));
+    trocar([contador(), exibido, h('p', { class: 'pergunta' }, 'Invente uma palavra para este número')], entrada, h('button', { class: 'botao escuro largo grande', onclick: conferir }, 'Conferir'), h('div', { class: 'bloco' }, recolhivel('Tabela', 'tabelaTreinoAberta', miniTabela())));
     animar(exibido, 'pular');
     setTimeout(() => entrada.focus(), 60);
   }
@@ -559,12 +594,15 @@ export function telaTreinoSistema(raiz, { tipo }, app) {
     const { novoRecorde } = registrarResultado(`sistema-${tipo}`, acertos);
     const titulo = h('div', { class: 'titulo-resultado' }, novoRecorde ? 'Novo recorde!' : 'Treino concluído');
     const tempoMedio = tempos.length ? formatarDecimal(media(tempos) / 1000) : null;
+    const maiorFogo = fogo.melhor;
+    fogo.reiniciar();
     som.fim();
     trocar(
       [
         titulo,
         h('div', { class: 'placar-final' }, h('strong', {}, `${acertos}/${treino.rodadas}`), h('span', {}, 'acertos')),
         tempoMedio && (tipo === 'lembrar' || tipo === 'numero') ? h('p', { class: 'centro' }, `Tempo médio nos acertos: ${tempoMedio} s`) : null,
+        maiorFogo >= 3 ? h('p', { class: 'centro fogo-resumo' }, icone('fogo', 22), `${maiorFogo} acertos rápidos seguidos`) : null,
       ],
       erros.length
         ? h(
