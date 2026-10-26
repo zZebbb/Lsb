@@ -4,6 +4,8 @@ App de xadrez para o celular que **funciona sem internet**: puzzles táticos com
 
 É um PWA (Progressive Web App): você abre uma vez pelo navegador, instala na tela inicial e, a partir daí, ele abre como um app normal, mesmo no modo avião. Funciona em Android e iPhone. Não tem anúncios, conta, nem coleta de dados: o progresso fica salvo só no seu aparelho.
 
+> Neste repositório também está o **Palácio**, um app de treino de memória feito do mesmo jeito: veja [`palacio/README.md`](palacio/README.md). Ele fica em `https://zzebbb.github.io/Lsb/palacio/`.
+
 ## O que tem
 
 **Puzzles**

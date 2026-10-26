@@ -58,9 +58,17 @@ self.addEventListener('activate', (evento) => {
   );
 });
 
+// pasta onde o app está publicado (ex.: /Lsb/)
+const ESCOPO = new URL('./', location).pathname;
+
 self.addEventListener('fetch', (evento) => {
   const req = evento.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== location.origin) return;
+  // só cuida dos próprios arquivos: outros apps publicados no mesmo site (como o Palácio,
+  // em palacio/) têm o próprio service worker
+  const caminho = url.pathname.slice(ESCOPO.length);
+  if (req.mode === 'navigate' ? !['', 'index.html'].includes(caminho) : !ARQUIVOS.includes(caminho)) return;
   evento.respondWith(
     caches.open(CACHE).then(async (cache) => {
       // páginas: sempre o index.html guardado (o app usa rotas com #)

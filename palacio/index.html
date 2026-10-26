@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Palácio</title>
+  <meta name="description" content="Treino de memória que funciona sem internet: sistema mnemônico, sequência de números, palavras e cartões de revisão.">
+  <meta name="theme-color" content="#fff6ea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Palácio">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/icone-180.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="topo">
+    <button class="topo-voltar" id="voltar" aria-label="Voltar" hidden>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h1 class="topo-titulo" id="titulo">Palácio</h1>
+    <span class="topo-offline" id="offline" hidden title="Sem internet: tudo continua funcionando">offline</span>
+  </header>
+
+  <main id="tela" class="tela" tabindex="-1"></main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
