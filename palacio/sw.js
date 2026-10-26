@@ -1,7 +1,7 @@
 // Gerado por palacio/ferramentas/gerar_sw.mjs — não edite à mão.
 // Guarda todos os arquivos do app no aparelho para funcionar sem internet.
 
-const VERSAO = '1a7953719f';
+const VERSAO = 'c32148e9c4';
 const CACHE = 'palacio-' + VERSAO;
 const ARQUIVOS = [
   "./",

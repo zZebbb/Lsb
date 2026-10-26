@@ -1,7 +1,7 @@
 // Tela inicial (os blocos de cada treino), progresso (sequência de dias, calendário e
 // recordes) e ajustes com backup.
 
-import { h, icone, armazenamento, config, diasSeguidos, recorde, resultados, hoje, diaDe } from '../util.js';
+import { h, icone, armazenamento, config, salvarConfig, diasSeguidos, recorde, resultados, hoje, diaDe } from '../util.js';
 import { pilulas, interruptor, graficoBarras, numeroDestaque } from '../componentes.js';
 import { baralhos, cartoes, resumo } from '../srs.js';
 import { paresRapidos } from '../sistema.js';
@@ -178,12 +178,41 @@ export function telaProgresso(raiz, _params, app) {
 
 // ------------------------------------------------------------ ajustes
 
+// Paletas de cores (os valores ficam no CSS; aqui só as amostras para escolher).
+const PALETAS = [
+  ['pastel', 'Pastel', ['#f6b4a7', '#cfe5aa', '#c8bcf2', '#b2dbee']],
+  ['argila', 'Argila', ['#dd9f86', '#b4c49c', '#8b6f5c', '#e8cc94']],
+  ['neblina', 'Neblina', ['#f8dcd3', '#dcebcc', '#e0d9f7', '#d4e9f4']],
+  ['petroleo', 'Petróleo', ['#e7c3ae', '#c6dbc2', '#2f6a6e', '#ebdbb2']],
+  ['vivas', 'Vivas', ['#ff6b57', '#b6f03c', '#6c4cf5', '#3cc8f5']],
+];
+
+function seletorPaleta(app) {
+  const atual = config().paleta;
+  const botoes = PALETAS.map(([id, nome, amostras]) => {
+    const b = h(
+      'button',
+      { type: 'button', class: 'paleta', 'aria-pressed': String(id === atual) },
+      h('span', { class: 'paleta-amostras' }, ...amostras.map((cor) => h('span', { style: { background: cor } }))),
+      h('span', { class: 'paleta-nome' }, nome),
+    );
+    b.addEventListener('click', () => {
+      salvarConfig({ paleta: id });
+      botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      app.aplicarConfig();
+    });
+    return b;
+  });
+  return h('div', { class: 'opcao' }, h('span', { class: 'opcao-rotulo' }, 'Cores'), h('div', { class: 'paletas', role: 'group', 'aria-label': 'Cores' }, ...botoes));
+}
+
 export function telaAjustes(raiz, _params, app) {
   app.titulo('Ajustes');
   raiz.append(
     h(
       'div',
       { class: 'bloco' },
+      seletorPaleta(app),
       interruptor('Sons', 'som'),
       interruptor('Vibrar ao errar', 'vibrar', null, 'No iPhone o navegador não deixa vibrar.'),
       pilulas(

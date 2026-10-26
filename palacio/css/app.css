@@ -1,5 +1,6 @@
-/* Palácio — estilos. Blocos coloridos com borda grossa e sombra sólida, letras arredondadas.
-   Pensado primeiro para celular em modo retrato. */
+/* Palácio — estilos. Blocos coloridos com borda e sombra, letras arredondadas.
+   As cores, o traço e a sombra vêm das paletas (data-paleta) e do modo claro/escuro
+   (data-modo, definido pelo app). Pensado primeiro para celular em modo retrato. */
 
 :root {
   --fundo: #fff6ea;
@@ -23,33 +24,153 @@
   --perigo: #d63a2a;
   --certo: #1f9d55;
 
+  --sobre-violeta: #ffffff; /* texto sobre o violeta */
+  --forte: #1d1630; /* preenchimentos escuros dentro dos blocos (botão, barra de tempo) */
+
+  /* traço e sombra dos blocos: cada paleta pode trocar */
   --raio: 22px;
+  --traco: 3px;
+  --traco-fino: 2.5px;
   --sombra: 5px 5px 0 var(--tinta);
   --sombra-pequena: 3px 3px 0 var(--tinta);
+  --sombra-botao: 4px 4px 0 var(--tinta);
+  --sombra-apertado: 0 0 0 var(--tinta);
+  --apertar: translate(4px, 4px);
+  --apertar-pequeno: translate(3px, 3px);
   --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
   --acento: transparent;
   --altura-topo: 56px;
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-tema-cor='claro']) {
-    --fundo: #16131f;
-    --superficie: #241f33;
-    --superficie-2: #2e2840;
-    --texto: #f4f0ff;
-    --texto-suave: #a9a1bf;
-    --tinta: #000000;
-    --borda-suave: #3a3350;
-    --primario-fundo: #f4f0ff;
-    --primario-texto: #1d1630;
-    --violeta: #7a5cff;
-    --perigo: #ff7a66;
-    --certo: #5fd38d;
-  }
+/* ------------------------------------------------------------ paletas
+   Sem data-paleta: "vivas" (as cores fortes do começo). */
+
+/* Pastel: o mesmo jeito de blocos, com cores claras e traço mais fino */
+:root[data-paleta='pastel'] {
+  --fundo: #fbf7f2;
+  --superficie-2: #f2ece4;
+  --texto: #3d3752;
+  --texto-suave: #7a7389;
+  --tinta: #4a4360;
+  --borda-suave: #ebe3d8;
+  --primario-fundo: #4a4360;
+  --ficha-texto: #3d3752;
+  --forte: #4a4360;
+  --coral: #f6b4a7;
+  --lima: #cfe5aa;
+  --violeta: #c8bcf2;
+  --ciano: #b2dbee;
+  --sol: #f5db9d;
+  --rosa: #f2c2d4;
+  --sobre-violeta: #3d3752;
+  --traco: 2px;
+  --traco-fino: 2px;
+  --sombra: 3px 3px 0 var(--tinta);
+  --sombra-pequena: 2px 2px 0 var(--tinta);
+  --sombra-botao: 3px 3px 0 var(--tinta);
+  --apertar: translate(3px, 3px);
+  --apertar-pequeno: translate(2px, 2px);
 }
 
-:root[data-tema-cor='escuro'] {
+/* Argila: tons de terra (terracota, sálvia, areia), traço marrom e sombra leve */
+:root[data-paleta='argila'] {
+  --fundo: #f3ede3;
+  --superficie: #fffaf3;
+  --superficie-2: #ebe2d4;
+  --texto: #43382f;
+  --texto-suave: #7d6f62;
+  --tinta: #6b5a4c;
+  --borda-suave: #e3d8c8;
+  --primario-fundo: #5a4a3d;
+  --ficha: #fffaf3;
+  --ficha-texto: #43382f;
+  --forte: #5a4a3d;
+  --coral: #dd9f86;
+  --lima: #b4c49c;
+  --violeta: #8b6f5c;
+  --ciano: #a2bccb;
+  --sol: #e8cc94;
+  --rosa: #dbaeac;
+  --sobre-violeta: #ffffff;
+  --raio: 18px;
+  --traco: 2px;
+  --traco-fino: 1.5px;
+  --sombra: 3px 3px 0 rgba(107, 90, 76, 0.45);
+  --sombra-pequena: 2px 2px 0 rgba(107, 90, 76, 0.45);
+  --sombra-botao: 3px 3px 0 rgba(107, 90, 76, 0.45);
+  --sombra-apertado: 0 0 0 rgba(107, 90, 76, 0.45);
+  --apertar: translate(2px, 2px);
+  --apertar-pequeno: translate(2px, 2px);
+}
+
+/* Neblina: fundo claro, cores bem leves, sem contorno escuro, sombra difusa */
+:root[data-paleta='neblina'] {
+  --fundo: #f5f6f8;
+  --superficie-2: #eceef2;
+  --texto: #2a2f3a;
+  --texto-suave: #6b7280;
+  --tinta: #dde1e7;
+  --borda-suave: #e6e9ee;
+  --primario-fundo: #2a2f3a;
+  --ficha-texto: #2a2f3a;
+  --forte: #2a2f3a;
+  --coral: #f8dcd3;
+  --lima: #dcebcc;
+  --violeta: #e0d9f7;
+  --ciano: #d4e9f4;
+  --sol: #f7e9c6;
+  --rosa: #f5d9e3;
+  --sobre-violeta: #2a2f3a;
+  --raio: 20px;
+  --traco: 1.5px;
+  --traco-fino: 1px;
+  --sombra: 0 4px 16px rgba(30, 40, 60, 0.08);
+  --sombra-pequena: 0 2px 6px rgba(30, 40, 60, 0.08);
+  --sombra-botao: 0 2px 8px rgba(30, 40, 60, 0.1);
+  --sombra-apertado: 0 1px 2px rgba(30, 40, 60, 0.08);
+  --apertar: scale(0.98);
+  --apertar-pequeno: scale(0.96);
+}
+
+/* Petróleo: verde-azulado profundo com areia e sálvia, sóbrio */
+:root[data-paleta='petroleo'] {
+  --fundo: #f1f4f2;
+  --superficie-2: #e5ebe8;
+  --texto: #1f3537;
+  --texto-suave: #5f7273;
+  --tinta: #2d4a4c;
+  --borda-suave: #dbe3e0;
+  --primario-fundo: #2d5d60;
+  --ficha: #fbfcfa;
+  --ficha-texto: #1f3537;
+  --forte: #2d4a4c;
+  --coral: #e7c3ae;
+  --lima: #c6dbc2;
+  --violeta: #2f6a6e;
+  --ciano: #bdd8da;
+  --sol: #ebdbb2;
+  --rosa: #e2cacc;
+  --sobre-violeta: #ffffff;
+  --raio: 18px;
+  --traco: 1.5px;
+  --traco-fino: 1.5px;
+  --sombra: 0 3px 0 rgba(45, 74, 76, 0.25);
+  --sombra-pequena: 0 2px 0 rgba(45, 74, 76, 0.25);
+  --sombra-botao: 0 3px 0 rgba(45, 74, 76, 0.3);
+  --sombra-apertado: 0 0 0 rgba(45, 74, 76, 0.3);
+  --apertar: translateY(3px);
+  --apertar-pequeno: translateY(2px);
+}
+
+/* Neblina tem contorno claro: as casas dos dígitos precisam de um traço mais visível */
+:root[data-paleta='neblina'] .casa-digito {
+  border-color: #b9c0cc;
+}
+
+/* ------------------------------------------------------------ modo escuro */
+
+:root[data-modo='escuro'] {
   --fundo: #16131f;
   --superficie: #241f33;
   --superficie-2: #2e2840;
@@ -65,8 +186,99 @@
   color-scheme: dark;
 }
 
-:root[data-tema-cor='claro'] {
-  color-scheme: light;
+:root[data-modo='escuro'][data-paleta='pastel'] {
+  --fundo: #1b1a22;
+  --superficie: #26242f;
+  --superficie-2: #312e3b;
+  --texto: #f1eef6;
+  --texto-suave: #aaa4b8;
+  --tinta: #0e0d12;
+  --borda-suave: #393544;
+  --primario-fundo: #f1eef6;
+  --primario-texto: #2b2738;
+  --ficha: #f7f3ee;
+  --ficha-texto: #2b2738;
+  --forte: #2b2738;
+  --coral: #e9a194;
+  --lima: #bcd796;
+  --violeta: #b3a6e6;
+  --ciano: #9ccbe0;
+  --sol: #e8cb86;
+  --rosa: #e3abc0;
+  --sobre-violeta: #2b2738;
+}
+
+:root[data-modo='escuro'][data-paleta='argila'] {
+  --fundo: #1d1915;
+  --superficie: #2a241e;
+  --superficie-2: #352e26;
+  --texto: #f2ebe2;
+  --texto-suave: #b5a898;
+  --tinta: #0f0c09;
+  --borda-suave: #3e352c;
+  --primario-fundo: #f2ebe2;
+  --primario-texto: #2f2620;
+  --ficha: #f7f0e6;
+  --ficha-texto: #2f2620;
+  --forte: #2f2620;
+  --coral: #c98a72;
+  --lima: #9fb086;
+  --violeta: #7a604f;
+  --ciano: #8ea8b8;
+  --sol: #d4b67c;
+  --rosa: #c79896;
+  --sombra: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  --sombra-pequena: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  --sombra-botao: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+:root[data-modo='escuro'][data-paleta='neblina'] {
+  --fundo: #15181d;
+  --superficie: #1e2229;
+  --superficie-2: #272c35;
+  --texto: #e8ebf0;
+  --texto-suave: #9aa3b2;
+  --tinta: #2e343e;
+  --borda-suave: #2a2f38;
+  --primario-fundo: #e8ebf0;
+  --primario-texto: #2a2f3a;
+  --ficha: #ffffff;
+  --ficha-texto: #2a2f3a;
+  --forte: #2a2f3a;
+  --coral: #e8bfb3;
+  --lima: #c4d9b0;
+  --violeta: #c9bff0;
+  --ciano: #b6d6e8;
+  --sol: #eedcab;
+  --rosa: #ecc1d0;
+  --sobre-violeta: #2a2f3a;
+  --sombra: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --sombra-pequena: 0 2px 6px rgba(0, 0, 0, 0.35);
+  --sombra-botao: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-modo='escuro'][data-paleta='petroleo'] {
+  --fundo: #121a1a;
+  --superficie: #1b2626;
+  --superficie-2: #233131;
+  --texto: #e6efed;
+  --texto-suave: #9db0ae;
+  --tinta: #0a1010;
+  --borda-suave: #2a3a3a;
+  --primario-fundo: #e6efed;
+  --primario-texto: #1f3537;
+  --ficha: #f6f8f6;
+  --ficha-texto: #1f3537;
+  --forte: #1f3537;
+  --coral: #cfa892;
+  --lima: #a9c3a5;
+  --violeta: #3f8a8f;
+  --ciano: #9fc2c4;
+  --sol: #d6c493;
+  --rosa: #cbb0b2;
+  --sombra: 0 3px 0 rgba(0, 0, 0, 0.45);
+  --sombra-pequena: 0 2px 0 rgba(0, 0, 0, 0.45);
+  --sombra-botao: 0 3px 0 rgba(0, 0, 0, 0.5);
 }
 
 :root[data-secao='coral'] { --acento: var(--coral); }
@@ -192,7 +404,7 @@ p {
   flex: none;
   width: 40px;
   height: 40px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 12px;
   background: var(--superficie);
   color: var(--texto);
@@ -202,7 +414,7 @@ p {
 }
 
 .topo-voltar:active {
-  transform: translate(3px, 3px);
+  transform: var(--apertar-pequeno);
   box-shadow: none;
 }
 
@@ -210,7 +422,7 @@ p {
   font-size: 0.75rem;
   font-weight: 800;
   padding: 2px 10px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   background: var(--sol);
   color: var(--ficha-texto);
@@ -239,7 +451,7 @@ p {
   position: relative;
   background: var(--superficie);
   color: var(--texto);
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: var(--raio);
   box-shadow: var(--sombra);
   padding: 16px;
@@ -265,8 +477,8 @@ a.bloco {
 }
 
 a.bloco:active {
-  transform: translate(4px, 4px);
-  box-shadow: 1px 1px 0 var(--tinta);
+  transform: var(--apertar);
+  box-shadow: var(--sombra-apertado);
 }
 
 .cor-coral,
@@ -281,7 +493,7 @@ a.bloco:active {
 
 .cor-coral { --cor: var(--coral); }
 .cor-lima { --cor: var(--lima); }
-.cor-violeta { --cor: var(--violeta); --sobre: #ffffff; }
+.cor-violeta { --cor: var(--violeta); --sobre: var(--sobre-violeta); }
 .cor-ciano { --cor: var(--ciano); }
 .cor-sol { --cor: var(--sol); }
 .cor-rosa { --cor: var(--rosa); }
@@ -300,7 +512,7 @@ a.bloco:active {
 
 .barra {
   height: 16px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 999px;
   background: var(--superficie-2);
   overflow: hidden;
@@ -311,7 +523,7 @@ a.bloco:active {
   display: block;
   height: 100%;
   background: var(--lima);
-  border-right: 3px solid var(--tinta);
+  border-right: var(--traco) solid var(--tinta);
 }
 
 /* ------------------------------------------------------------ botões */
@@ -338,11 +550,11 @@ a.bloco:active {
   gap: 8px;
   min-height: 50px;
   padding: 10px 18px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 16px;
   background: var(--superficie);
   color: var(--texto);
-  box-shadow: 4px 4px 0 var(--tinta);
+  box-shadow: var(--sombra-botao);
   font-weight: 800;
   font-size: 1rem;
   text-decoration: none;
@@ -354,8 +566,8 @@ a.bloco:active {
 }
 
 .botao:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--tinta);
+  transform: var(--apertar);
+  box-shadow: var(--sombra-apertado);
 }
 
 .botao[disabled] {
@@ -369,7 +581,7 @@ a.bloco:active {
 }
 
 [class*='cor-'] .botao.escuro {
-  background: #1d1630;
+  background: var(--forte);
   color: #ffffff;
 }
 
@@ -454,7 +666,7 @@ a.bloco:active {
 }
 
 .pilula {
-  border: 2.5px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   padding: 7px 14px;
   background: var(--superficie);
@@ -469,6 +681,50 @@ a.bloco:active {
   background: var(--primario-fundo);
   color: var(--primario-texto);
   transform: scale(1.05);
+}
+
+.paletas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 10px;
+}
+
+.paleta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px 8px;
+  border: var(--traco-fino) solid var(--borda-suave);
+  border-radius: 16px;
+  background: var(--superficie);
+  color: var(--texto);
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.15s var(--mola), border-color 0.15s;
+}
+
+.paleta[aria-pressed='true'] {
+  border-color: var(--tinta);
+  box-shadow: var(--sombra-pequena);
+  transform: scale(1.04);
+}
+
+.paleta-amostras {
+  display: flex;
+}
+
+.paleta-amostras span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.25);
+  margin-left: -5px;
+}
+
+.paleta-amostras span:first-child {
+  margin-left: 0;
 }
 
 .interruptor {
@@ -490,7 +746,7 @@ a.bloco:active {
 .interruptor span {
   position: absolute;
   inset: 0;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 999px;
   background: var(--superficie-2);
   transition: background 0.2s;
@@ -504,7 +760,7 @@ a.bloco:active {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--tinta);
+  background: var(--forte);
   transition: transform 0.25s var(--mola);
 }
 
@@ -514,7 +770,7 @@ a.bloco:active {
 
 .interruptor input:checked + span::after {
   transform: translateX(22px);
-  background: #1d1630;
+  background: var(--forte);
 }
 
 .interruptor input:focus-visible + span {
@@ -525,7 +781,7 @@ a.bloco:active {
 .entrada {
   display: block;
   width: 100%;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 14px;
   padding: 12px 14px;
   background: var(--superficie);
@@ -595,7 +851,7 @@ a.bloco:active {
   place-items: center;
   width: 64px;
   height: 64px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 18px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -652,7 +908,7 @@ a.bloco:active {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 3px 12px;
-  border: 2.5px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -701,7 +957,7 @@ a.bloco:active {
 .tempo {
   width: min(280px, 80%);
   height: 14px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 999px;
   background: var(--ficha);
   overflow: hidden;
@@ -710,7 +966,7 @@ a.bloco:active {
 .tempo > span {
   display: block;
   height: 100%;
-  background: var(--tinta);
+  background: var(--forte);
   animation: esvaziar linear forwards;
 }
 
@@ -733,7 +989,7 @@ a.bloco:active {
   place-items: center;
   width: 36px;
   height: 48px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 10px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -771,11 +1027,11 @@ a.bloco:active {
 
 .tecla {
   height: clamp(50px, 7.2dvh, 64px);
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 16px;
   background: var(--superficie);
   color: var(--texto);
-  box-shadow: 3px 3px 0 var(--tinta);
+  box-shadow: var(--sombra-pequena);
   font-size: 1.7rem;
   font-weight: 900;
   display: grid;
@@ -787,7 +1043,7 @@ a.bloco:active {
 }
 
 .tecla:active {
-  transform: translate(3px, 3px);
+  transform: var(--apertar-pequeno);
   box-shadow: none;
 }
 
@@ -842,7 +1098,7 @@ a.bloco:active {
 }
 
 .linha-digitos .errado {
-  background: #1d1630;
+  background: var(--forte);
   color: #ffffff;
   border-radius: 6px;
 }
@@ -907,7 +1163,7 @@ a.bloco:active {
   align-items: baseline;
   gap: 6px;
   padding: 3px 10px;
-  border: 2.5px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 10px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -938,7 +1194,7 @@ a.bloco:active {
 
 .vida path {
   fill: var(--coral);
-  stroke: #1d1630;
+  stroke: var(--forte);
 }
 
 .vida {
@@ -1043,7 +1299,7 @@ a.bloco:active {
   top: -18px;
   width: 11px;
   height: 15px;
-  border: 2px solid #1d1630;
+  border: var(--traco-fino) solid var(--forte);
   border-radius: 3px;
   animation: cair ease-in forwards;
 }
@@ -1081,7 +1337,7 @@ a.bloco:active {
   flex: 1;
   max-width: 28px;
   background: var(--acento-grafico, var(--ciano));
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 6px 6px 2px 2px;
   transform-origin: bottom;
   animation: crescer 0.5s var(--mola) both;
@@ -1122,7 +1378,7 @@ a.bloco:active {
   place-items: center;
   width: 38px;
   height: 44px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 10px;
   background: var(--cor);
   color: var(--sobre, var(--ficha-texto));
@@ -1142,7 +1398,7 @@ a.bloco:active {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 999px;
   background: var(--superficie);
   box-shadow: var(--sombra-pequena);
@@ -1198,7 +1454,7 @@ a.bloco:active {
   place-items: center;
   width: 50px;
   height: 50px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 14px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -1248,9 +1504,9 @@ a.bloco:active {
   border: 1.5px solid transparent;
 }
 
-.calendario .n1 { background: #ffe39a; border-color: var(--tinta); }
+.calendario .n1 { background: color-mix(in srgb, var(--sol) 45%, var(--superficie)); border-color: var(--tinta); }
 .calendario .n2 { background: var(--sol); border-color: var(--tinta); }
-.calendario .n3 { background: #ff9f43; border-color: var(--tinta); }
+.calendario .n3 { background: color-mix(in srgb, var(--sol) 50%, var(--coral)); border-color: var(--tinta); }
 .calendario .n4 { background: var(--coral); border-color: var(--tinta); }
 
 .calendario .hoje {
@@ -1309,7 +1565,7 @@ a.bloco:active {
   align-items: baseline;
   gap: 5px;
   padding: 2px 10px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -1344,7 +1600,7 @@ a.bloco:active {
 
 .lista-cartoes {
   margin-top: 10px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 18px;
   background: var(--superficie);
   overflow: hidden;
@@ -1394,7 +1650,7 @@ a.bloco:active {
   font-size: 0.75rem;
   font-weight: 800;
   padding: 2px 8px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
 }
 
@@ -1419,7 +1675,7 @@ a.bloco:active {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 2px 10px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -1551,7 +1807,7 @@ a.bloco:active {
   flex: none;
   width: 52px;
   height: 52px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 14px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -1573,7 +1829,7 @@ a.bloco:active {
   font-weight: 900;
   font-size: 0.85rem;
   padding: 2px 10px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 999px;
   background: var(--ficha);
   color: var(--ficha-texto);
@@ -1596,7 +1852,7 @@ a.bloco:active {
   align-items: center;
   min-width: 0;
   padding: 7px 2px;
-  border: 2.5px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 12px;
   background: color-mix(in srgb, var(--cor) 38%, var(--superficie));
   color: var(--texto);
@@ -1703,7 +1959,7 @@ a.bloco:active {
   align-items: center;
   text-align: center;
   padding: 4px 2px;
-  border: 2px solid var(--tinta);
+  border: var(--traco-fino) solid var(--tinta);
   border-radius: 10px;
   background: color-mix(in srgb, var(--cor) 40%, var(--superficie));
   font-size: 0.66rem;
@@ -1745,7 +2001,7 @@ a.bloco:active {
   right: 10px;
   width: 38px;
   height: 38px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 12px;
   background: var(--superficie-2);
   font-size: 1.4rem;
@@ -1780,7 +2036,7 @@ a.bloco:active {
   transform: translateX(-50%);
   max-width: calc(100% - 32px);
   padding: 12px 18px;
-  border: 3px solid var(--tinta);
+  border: var(--traco) solid var(--tinta);
   border-radius: 16px;
   background: var(--primario-fundo);
   color: var(--primario-texto);

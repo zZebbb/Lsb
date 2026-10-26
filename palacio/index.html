@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Palácio</title>
   <meta name="description" content="Treino de memória que funciona sem internet: sistema mnemônico, sequência de números, palavras e cartões de revisão.">
-  <meta name="theme-color" content="#fff6ea">
+  <meta name="theme-color" content="#fbf7f2">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,6 +14,16 @@
   <link rel="icon" href="img/icone.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="img/icone-180.png">
   <link rel="stylesheet" href="css/app.css">
+  <script>
+    // aplica paleta e modo escuro antes de desenhar a tela (evita piscar com as cores erradas)
+    try {
+      var c = JSON.parse(localStorage.getItem('palacio:config') || '{}');
+      var r = document.documentElement;
+      var p = c.paleta || 'pastel';
+      if (p !== 'vivas') r.dataset.paleta = p;
+      r.dataset.modo = c.cores === 'escuro' || (c.cores !== 'claro' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'escuro' : 'claro';
+    } catch (e) {}
+  </script>
 </head>
 <body>
   <header class="topo">

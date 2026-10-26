@@ -22,6 +22,8 @@ App de treino de memória para o celular que **funciona sem internet**, em portu
 
 **Progresso**: dias seguidos, calendário das últimas semanas, recordes e gráficos. Ajustes de som, aparência (clara/escura) e backup em arquivo.
 
+**Cores**: cinco paletas em Ajustes → Cores, todas com modo claro e escuro: Pastel (a padrão), Argila (tons de terra), Neblina (bem leve, sem contorno), Petróleo (sóbria) e Vivas (as cores fortes).
+
 ## Como instalar no iPhone
 
 1. O app precisa estar publicado no GitHub Pages (veja o README da raiz). Ele fica em `https://zzebbb.github.io/Lsb/palacio/`.
@@ -45,7 +47,7 @@ python3 -m http.server 8080
 
 ```
 index.html, manifest.webmanifest, sw.js   app, instalação e modo offline
-css/app.css                               estilos (blocos coloridos, claro/escuro)
+css/app.css                               estilos, paletas de cores e modo escuro
 js/app.js                                 rotas e barra superior
 js/util.js                                armazenamento, sons, recordes, ícones
 js/componentes.js, js/teclado.js          peças de interface e teclado numérico

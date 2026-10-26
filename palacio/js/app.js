@@ -58,10 +58,12 @@ const app = {
   aplicarConfig() {
     const c = config();
     const raiz = document.documentElement;
-    if (c.cores === 'claro' || c.cores === 'escuro') raiz.dataset.temaCor = c.cores;
-    else delete raiz.dataset.temaCor;
     const escuro = c.cores === 'escuro' || (c.cores !== 'claro' && matchMedia('(prefers-color-scheme: dark)').matches);
-    document.querySelector('meta[name=theme-color]').content = escuro ? '#16131f' : '#fff6ea';
+    raiz.dataset.modo = escuro ? 'escuro' : 'claro';
+    if (c.paleta && c.paleta !== 'vivas') raiz.dataset.paleta = c.paleta;
+    else delete raiz.dataset.paleta;
+    // a barra de status do celular acompanha o fundo da paleta
+    document.querySelector('meta[name=theme-color]').content = getComputedStyle(raiz).getPropertyValue('--fundo').trim();
   },
   mostrarDicaInstalacao(alvo) {
     const instalado = matchMedia('(display-mode: standalone)').matches || navigator.standalone;

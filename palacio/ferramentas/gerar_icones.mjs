@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { chromium } = createRequire(import.meta.url)('playwright');
 
-const TINTA = '#1d1630';
+// cores da paleta Pastel (a padrão do app)
+const TINTA = '#4a4360';
 
 // Fachada: telhado, quatro colunas e a base, cada peça com sombra sólida deslocada.
 function desenho() {
@@ -21,7 +22,7 @@ function desenho() {
     `<rect x="356" y="214" width="52" height="166" rx="12"/>`,
     `<rect x="80" y="394" width="352" height="46" rx="14"/>`,
   ];
-  const cores = ['#ffc93c', '#ff6b57', '#b6f03c', '#3cc8f5', '#ff7ab6', '#fffdf8'];
+  const cores = ['#f5db9d', '#f6b4a7', '#cfe5aa', '#b2dbee', '#f2c2d4', '#fffdf8'];
   const sombra = pecas.map((p) => p.replace('/>', ` fill="${TINTA}"/>`)).join('');
   const frente = pecas.map((p, i) => p.replace('/>', ` fill="${cores[i]}"/>`)).join('');
   return `<g stroke="${TINTA}" stroke-width="10" stroke-linejoin="round">
@@ -33,7 +34,7 @@ function desenho() {
 function svg({ cantos, escala = 1 }) {
   const t = (512 * (1 - escala)) / 2;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="${cantos}" fill="#6c4cf5"/>
+  <rect width="512" height="512" rx="${cantos}" fill="#c8bcf2"/>
   <g transform="translate(${t} ${t - 6 * escala}) scale(${escala})">${desenho()}</g>
 </svg>
 `;

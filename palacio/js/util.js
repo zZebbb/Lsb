@@ -44,6 +44,7 @@ const CONFIG_PADRAO = {
   som: true,
   vibrar: true,
   cores: 'auto',
+  paleta: 'pastel',
   // sequência de números
   tempoNumeros: 'normal',
   inicioNumeros: 1,
